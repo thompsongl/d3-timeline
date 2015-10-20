@@ -57,7 +57,7 @@
 
       var axis = g.append("g")
         .attr("class", "axis")
-        .attr("transform", "translate(" + 0 + "," + yPosition + ")")
+        .attr("transform", "translate(" + yPosition + ", " + 0 + ")")
         .call(xAxis);
     };
 
@@ -250,17 +250,17 @@
             .append(function(d, i) {
                 return document.createElementNS(d3.ns.prefix.svg, "display" in d? d.display:display);
             })
-            .attr("x", getXPos)
-            .attr("y", getStackPosition)
-            .attr("width", function (d, i) {
+            .attr("y", getXPos)
+            .attr("x", getStackPosition)
+            .attr("height", function (d, i) {
               return (d.ending_time - d.starting_time) * scaleFactor;
             })
-            .attr("cy", function(d, i) {
+            .attr("cx", function(d, i) {
                 return getStackPosition(d, i) + itemHeight/2;
             })
-            .attr("cx", getXPos)
+            .attr("cy", getXPos)
             .attr("r", itemHeight / 2)
-            .attr("height", itemHeight)
+            .attr("width", itemHeight)
             .style("fill", function(d, i){
               var dColorPropName;
               if (d.color) return d.color;
@@ -351,21 +351,21 @@
       var aboveFirstItem = margin.top;
       var timeAxisYPosition = showAxisTop ? aboveFirstItem : belowLastItem;
       if (showTimeAxis) { appendTimeAxis(g, xAxis, timeAxisYPosition); }
-      if (timeAxisTick) { appendTimeAxisTick(g, xAxis, maxStack); }
+      if (timeAxisTick) { Tick(g, xAxis, maxStack); }
 
       if (width > gParentSize.width) {
         var move = function() {
           var x = Math.min(0, Math.max(gParentSize.width - width, d3.event.translate[0]));
           zoom.translate([x, 0]);
-          g.attr("transform", "translate(" + x + ",0)");
+          //g.attr("transform", "translate(" + x + ",0)");
           scroll(x*scaleFactor, xScale);
         };
 
         var zoom = d3.behavior.zoom().x(xScale).on("zoom", move);
 
-        gParent
-          .attr("class", "scrollable")
-          .call(zoom);
+        // gParent
+        //   .attr("class", "scrollable")
+        //   .call(zoom);
       }
 
       if (rotateTicks) {
